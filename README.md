@@ -1,0 +1,1 @@
+# yapmak-lazim
