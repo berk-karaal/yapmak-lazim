@@ -1,0 +1,54 @@
+{% extends 'app_main/base.html' %}
+
+{% block body_block %}
+<a style="text-decoration: none; color: black;" href="{% url 'welcome' %}"><h1 class="text-center mt-md-3 mt-2">Yapmak Lazım</h1></a>
+
+<h3 class="mt-md-3 mt-2">Kayıt ol</h3>
+
+<form method="POST">
+    {% csrf_token %}
+    <p style="margin-bottom:0px">{{ form.email.label }}:</p>
+    {{ form.email }}
+    {% for error in form.email.errors %}
+        <p style="margin-top:0px; color: darkred">{{ error }}</p>
+    {% endfor %}
+    
+    <p style="margin-bottom:0px">{{ form.name.label }}:</p>
+    {{ form.name }}
+    {% for error in form.name.errors %}
+        <p style="margin-top:0px; color: darkred">{{ error }}</p>
+    {% endfor %}
+    
+    <p style="margin-bottom:0px">{{ form.password1.label }}:</p>
+    {{ form.password1 }}
+    <p style="margin-top:7px; margin-bottom:0px">{{ form.password2.label }}:</p>
+    {{ form.password2 }}
+    {% for error in form.password2.errors %}
+        <p style="margin:0px; color: darkred">{{ error }}</p>
+    {% endfor %}    
+
+    <br>
+    
+    <button class="btn btn-primary" type="submit">Kayıt ol</button>
+    <br><br>
+    <p>Zaten bir hesabın var mı? <b><a href="{% url 'login' %}">Giriş yap</a></b></p>
+    
+</form>
+
+<script>
+    var element = document.getElementById("id_email");
+    element.classList.add("form-control", "mb-2")
+
+    var element = document.getElementById("id_name");
+    element.classList.add("form-control", "mb-2")
+
+    var element = document.getElementById("id_password1");
+    element.classList.add("form-control", "mb-2")
+
+    var element = document.getElementById("id_password2");
+    element.classList.add("form-control", "mb-2")
+</script>
+
+{% endblock body_block %}
+
+

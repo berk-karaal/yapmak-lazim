@@ -1,0 +1,81 @@
+<div id="todo_list" >
+    <!-- marked todos START -->
+    {% if marked_todos.count > 0 %}
+    <div class="mt-3">
+        <h3><i class="fas fa-star"></i> İşaretlenmiş</h3>
+        <div>
+            {% for todo in marked_todos %}
+                <div class="card mb-2" style="background-color: {{ todo.color }};">
+                    <div id="X" class="m-2 row">
+                        <i class="{{ todo.is_done|yesno:"fas fa-check-square,far fa-square" }} fa-lg col-auto my-auto mx-0 px-0" onclick="done_undone_by_id({{ todo.id }})"></i>
+                        <p class="col mb-0"  id="content_by_id_{{ todo.id }}">{{ todo.content }}</p>
+                        <div class="dropdown col-auto my-auto mx-0 p-0">
+                            <button class="btn btn-default dropdown-toggle" id="dropdownMenu1-X" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fas fa-ellipsis-v fa-lg col-auto my-auto mx-0 ps-0"></i>
+                            </button>
+                            
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1-X">
+                                <li><span class="dropdown-item" onclick="mark_unmark_by_id({{ todo.id }})" ><i class="fas fa-star"></i> İşareti kaldır</span></li>
+                                <li><span class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onclick="editing_on({{ todo.id }})" ><i class="far fa-edit"></i> Düzenle</span></li>
+                                <li><span class="dropdown-item" onclick="delete_by_id({{ todo.id }})"><i class="fas fa-trash"></i> Sil</span></li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}        
+        </div>
+    </div>
+    <hr>
+    {% endif %}
+    <!-- marked todos END -->
+
+    <!-- unmarked todos START -->
+    {% if unmarked_todos.count > 0 %}
+    <div class="mt-3">
+        <div>
+            {% for todo in unmarked_todos %}
+                <div class="card mb-2" style="background-color: {{ todo.color }};">
+                    <div id="X" class="m-2 row">
+                        <i class="{{ todo.is_done|yesno:"fas fa-check-square, far fa-square" }} fa-lg col-auto my-auto mx-0 px-0" onclick="done_undone_by_id({{ todo.id }})"></i>
+                        <p class="col my-auto" id="content_by_id_{{ todo.id }}">{{ todo.content }}</p>
+                        <div class="dropdown col-auto my-auto mx-0 p-0">
+                            <button class="btn btn-default dropdown-toggle" id="dropdownMenu1-X" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fas fa-ellipsis-v fa-lg col-auto my-auto mx-0 ps-0"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1-X">
+                                <li><span class="dropdown-item" onclick="mark_unmark_by_id({{ todo.id }})" ><i class="far fa-star"></i> İşaretle</span></li>
+                                <li><span class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onclick="editing_on({{ todo.id }})" ><i class="far fa-edit"></i> Düzenle</span></li>
+                                <li><span class="dropdown-item" onclick="delete_by_id({{ todo.id }})"><i class="fas fa-trash"></i> Sil</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}        
+        </div>
+    </div>
+    {% endif %}
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+                <textarea id="edit_text_input" name="edit_text_input" rows="4" style="width: 100%;  box-sizing: border-box;"></textarea><br>
+                <button class="btn btn-primary" data-bs-dismiss="modal" onclick="update_content_by_id()">Kaydet</button>
+            </div>
+            
+        </div>
+        </div>
+    </div>
+    
+
+      
+    <!-- unmarked todos END -->
+</div>

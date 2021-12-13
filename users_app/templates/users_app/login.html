@@ -1,0 +1,48 @@
+{% extends 'app_main/base.html' %}
+
+{% block body_block %}
+<a style="text-decoration: none; color: black;" href="{% url 'welcome' %}"><h1 class="text-center mt-md-3 mt-2">Yapmak Lazım</h1></a>
+
+<h3 class="mt-md-3 mt-2">Giriş yap</h3>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <p style="margin-bottom:0px">{{ form.email.label }}:</p>
+    {{ form.email }}
+    
+    <p style="margin-bottom:0px">{{ form.password.label }}:</p>
+    {{ form.password }}
+
+    <!-- field specific errors -->
+    {% for field in form %}
+        <p>
+        {% for error in field.errors %}
+            <p style="color: darkred">{{ error }}</p>
+        {% endfor %}
+        </p>
+    {% endfor %}
+
+    <!-- non-field errors -->
+    {% if form.non_field_errors %}
+        <div style="color: darkred">
+            <p>{{form.non_field_errors.as_text}}</p>
+        </div>
+    {% endif %}
+    
+    <button class="btn btn-primary" type="submit">Giriş yap</button>
+    
+    <br><br>
+    <p>Bir hesabınız yok mu? <b><a href="{% url 'register' %}">Kaydolun</a></b></p>
+
+</form>
+
+<script>
+    var element = document.getElementById("id_email");
+    element.classList.add("form-control", "mb-2")
+    
+    var element = document.getElementById("id_password");
+    element.classList.add("form-control", "mb-2")
+</script>
+
+{% endblock body_block %}

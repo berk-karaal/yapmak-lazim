@@ -1,0 +1,220 @@
+{% extends 'app_main/base.html' %}
+
+{% block title_block %}Yapmak Lazım{% endblock title_block %}
+
+{% block head_block %}
+<!-- font awesome cdn -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" integrity="sha512-BnbUDfEUfV0Slx6TunuB042k9tuKe3xrD6q4mg5Ed72LTgzDIcLPxg6yI2gcMFRyomt+yJJxE+zJwNmxki6/RA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+{% endblock head_block %}
+
+{% block body_block %}
+
+<!-- Navbar START -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark rounded rounded-2 mt-md-2 mt-1">
+<div class="container-fluid">
+    
+    <div class="mx-auto order-0">
+    <a class="navbar-brand mx-3" href="{% url 'welcome' %}">Yapmak Lazım</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarID" aria-controls="navbarID" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    </div>
+
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2"  id="navbarID">
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ user.name }} <i class="fas fa-user ms-1"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li><a class="dropdown-item" href="{% url 'logout' %}">Çıkış yap</a></li>
+                  <li><a class="dropdown-item" href="{% url 'change_password' %}">Şifre değiştir</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+    </div>
+    
+</div>
+</nav>
+<!-- Navbar END -->
+
+
+<!-- add todo and filters START -->
+<div class="row justify-content-between">
+
+    <!-- Add new todo -->
+    <div class="dropdown col-auto mt-2">
+        <button class="btn btn-warning" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          <font size="+1"><i class="fas fa-plus-square"></i> Ekle</font>
+        </button>
+        
+        <div class="dropdown-menu">
+            <form class="px-4 py-3" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Ekle</button>
+            </form>
+          </div>
+
+    </div>
+    
+    
+    <div class="col-auto me-md-5 mt-2">
+        <form method="GET">
+            <div class="row ms-2">
+                <div class="col-auto mt-auto form-check form-switch"><font size="+1">
+                    <input class="form-check-input" id="tamamlananlari_goster_switch" name="tamamlananlari_goster" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Tamamlananları göster</label>
+                </font></div>
+
+                <div class="col-auto mt-auto">
+                    <div class="row">
+                        <p class="col-auto mt-auto form-label">Sıralama:</p>
+                        <select class="form-select form-select-sm col" name="sirala" aria-label=".form-select-sm example">
+                            <option value="yeni">Önce yeni</option>
+                            <option id="eski_option" value="eski">Önce eski</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="col-auto btn btn-primary mt-auto ms-2 me-2">Güncelle</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- add todo and filters END-->
+
+<div id="todo_list" >
+</div>
+
+<script>
+var url = new URL(window.location);
+var switch_value = url.searchParams.get("tamamlananlari_goster");
+var select_value = url.searchParams.get("sirala");
+
+if (switch_value == "on"){
+    document.getElementById("tamamlananlari_goster_switch").setAttribute("checked","");
+}
+
+if (select_value == "eski"){
+    document.getElementById("eski_option").setAttribute("selected","");
+}
+
+console.log(switch_value, select_value);
+
+async function get_list(){
+    const response = await fetch("{% url 'get_list' %}", {
+        method: "GET",
+        headers: {
+            "show-done": switch_value,
+            "sort": select_value,
+        },
+    });
+
+    data = await response.text();
+    document.getElementById("todo_list").outerHTML = data;
+}
+
+get_list();
+
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+async function delete_by_id(id){
+    const response = await fetch("{% url 'delete_todo' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({
+            "id":id
+        })
+    });
+
+    response_text = await response.text();
+
+    if (response_text == "deleted"){
+        get_list(); // update list
+    }else{
+        console.log("ERROR -> function delete_by_id() couldn't make a successful request");
+    }
+}
+
+async function mark_unmark_by_id(id){
+    const response = await fetch("{% url 'mark_unmark_todo' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({
+            "id":id
+        })
+    });
+
+    response_text = await response.text()
+
+    if (response_text=="mark_unmark_done"){
+        get_list();
+    }else{
+        console.log("ERROR -> function mark_unmark_by_id() couldn't make a successful request");
+    }
+}
+
+async function done_undone_by_id(id){
+    const response = await fetch("{% url 'done_undone_todo' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({
+            "id":id
+        })
+    });
+
+    response_text = await response.text()
+
+    if (response_text=="done_undone_successful"){
+        get_list()
+    }else{
+        console.log("ERROR -> function mark_unmark_by_id() couldn't make a successful request");
+
+    }
+}
+
+editing_on_id = null
+
+function editing_on(id){
+    editing_on_id = id
+    document.getElementById("edit_text_input").value = document.getElementById("content_by_id_"+String(id)).innerHTML;
+}
+
+async function update_content_by_id(){
+
+    id = editing_on_id
+    
+    const response = await fetch("{% url 'update_todo' %}", {
+        method:"POST",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({
+            "id":id,
+            "content": document.getElementById("edit_text_input").value
+        })
+    });
+
+    response_text = await response.text()
+
+    if (response_text == "content_updated"){
+        get_list()
+    }else{
+        console.log("ERROR -> function update_content_by_id() couldn't make a successful request");
+    }
+}
+
+</script>
+
+{% endblock body_block %}

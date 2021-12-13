@@ -1,0 +1,12 @@
+{% extends 'app_main/base.html' %}
+
+{% block title_block %}Hata 404{% endblock title_block %}
+
+{% block body_block %}
+
+<br>
+<h2>Aradığınız sayfa bulunamadı &#128533;</h2>
+<br>
+<a href="{% url 'welcome' %}"><font size="+2">Ana sayfaya geri dön</font></a>
+
+{% endblock body_block %}

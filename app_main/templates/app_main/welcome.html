@@ -1,0 +1,23 @@
+{% extends 'app_main/base.html' %}
+
+{% block title_block %}Yapmak Lazım{% endblock title_block %}
+
+{% block body_block %}
+    {% load static %}
+
+    <h1 class="text-center mt-md-3 mt-2">Yapmak Lazım</h1>
+    <p class="text-center">Şunlar, bunlar, onlar için tasarlanmış bir to-do list uygulaması.</p>
+
+    <div class="d-flex justify-content-center mt-4">
+        <a href="{% url 'login' %}" class="btn btn-success p-3 mx-2"><font size="+1">Giriş yap<font></a>
+        <a href="{% url 'register' %}" class="btn btn-warning p-3 mx-2"><font size="+1">Kayıt ol<font></a>
+    </div>
+    <br>
+
+    <p>Sırf static files kullanmış olayım diye eklenen görseller: </p>
+    <div class="row">
+        <img src="{% static 'app_main/img1.png' %}" class="img-fluid col-6">
+        <img src="{% static 'app_main/img2.png' %}" class="img-fluid col-6">
+    </div>
+
+{% endblock body_block %}
