@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
+import os
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path(f"{os.environ.get('ADMIN_PAGE_PATH')}/", admin.site.urls),
     path("", include("app_main.urls")),
     path("", include("users_app.urls")),
 ]
