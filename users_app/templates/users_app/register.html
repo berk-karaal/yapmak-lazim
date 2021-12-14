@@ -8,6 +8,7 @@
 <form method="POST">
     {% csrf_token %}
     <p style="margin-bottom:0px">{{ form.email.label }}:</p>
+    <p class="small m-0">({{ form.email.help_text }})</p>
     {{ form.email }}
     {% for error in form.email.errors %}
         <p style="margin-top:0px; color: darkred">{{ error }}</p>

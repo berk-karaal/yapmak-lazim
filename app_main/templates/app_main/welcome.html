@@ -6,7 +6,8 @@
     {% load static %}
 
     <h1 class="text-center mt-md-3 mt-2">Yapmak Lazım</h1>
-    <p class="text-center">Şunlar, bunlar, onlar için tasarlanmış bir to-do list uygulaması.</p>
+    <p class="text-center m-0">Şunlar, bunlar, onlar için geliştirilmiş bir to-do list uygulaması.</p>
+    <p class="text-center m-0">(Eğitim amaçlı bir uygulama olduğu için tasarıma pek özen göstermedim.)</p>
 
     <div class="d-flex justify-content-center mt-4">
         <a href="{% url 'login' %}" class="btn btn-success p-3 mx-2"><font size="+1">Giriş yap<font></a>
@@ -14,10 +15,10 @@
     </div>
     <br>
 
-    <p>Sırf static files kullanmış olayım diye eklenen görseller: </p>
+    <p style="margin: 0px">Sırf static files kullanmış olayım diye eklenen görseller: </p>
     <div class="row">
-        <img src="{% static 'app_main/img1.png' %}" class="img-fluid col-6">
-        <img src="{% static 'app_main/img2.png' %}" class="img-fluid col-6">
+        <img src="{% static 'app_main/img1.png' %}" class="img-fluid col-md-6 col-12" style="border: 4px solid gray">
+        <img src="{% static 'app_main/img2.png' %}" class="img-fluid col-md-6 col-12" style="border: 4px solid gray">
     </div>
 
 {% endblock body_block %}

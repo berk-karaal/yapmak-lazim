@@ -9,6 +9,7 @@ class Registration_Form(UserCreationForm):
     email = forms.EmailField(
         max_length=255,
         label="Email",
+        help_text="Onay mail'i atılmayacaktır. Sallama bir email adresi kullanabilirsiniz.",
         widget=forms.TextInput(
             attrs={
                 "autocomplete": "email",
